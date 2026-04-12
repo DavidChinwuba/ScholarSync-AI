@@ -1,0 +1,8 @@
+{
+  "name": "ScholarSync AI",
+  "description": "The ultimate AI-powered academic companion. ScholarSync AI streamlines your learning with intelligent homework assistance, automated flashcards, adaptive quizzes, and collaborative study environments.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}

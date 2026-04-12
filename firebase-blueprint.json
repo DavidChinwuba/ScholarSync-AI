@@ -1,0 +1,203 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile and progress tracking",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "displayName": { "type": "string" },
+        "email": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "isPremium": { "type": "boolean", "description": "Whether the user has a premium subscription" },
+        "stats": {
+          "type": "object",
+          "properties": {
+            "flashcardsStudied": { "type": "number" },
+            "quizzesCompleted": { "type": "number" },
+            "homeworkQuestionsAsked": { "type": "number" },
+            "studyTimeMinutes": { "type": "number" }
+          }
+        },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email"]
+    },
+    "FlashcardSet": {
+      "title": "Flashcard Set",
+      "description": "A collection of flashcards for a specific topic",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "topic": { "type": "string" },
+        "cards": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "front": { "type": "string" },
+              "back": { "type": "string" }
+            }
+          }
+        },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "title", "cards"]
+    },
+    "Quiz": {
+      "title": "Quiz",
+      "description": "A generated quiz for testing knowledge",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "questions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "question": { "type": "string" },
+              "options": { "type": "array", "items": { "type": "string" } },
+              "correctAnswer": { "type": "string" },
+              "explanation": { "type": "string" }
+            }
+          }
+        },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "title", "questions"]
+    },
+    "StudyGroup": {
+      "title": "Study Group",
+      "description": "Real-time collaborative study room",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "topic": { "type": "string" },
+        "createdBy": { "type": "string" },
+        "members": { "type": "array", "items": { "type": "string" } },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "topic", "createdBy"]
+    },
+    "StudySchedule": {
+      "title": "Study Schedule",
+      "description": "AI-generated study plan",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "topic": { "type": "string" },
+        "events": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "title": { "type": "string" },
+              "start": { "type": "string", "format": "date-time" },
+              "end": { "type": "string", "format": "date-time" },
+              "description": { "type": "string" }
+            }
+          }
+        },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "topic", "events"]
+    },
+    "UserTokens": {
+      "title": "User Tokens",
+      "description": "OAuth tokens for calendar integrations",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "google": {
+          "type": "object",
+          "properties": {
+            "access_token": { "type": "string" },
+            "refresh_token": { "type": "string" },
+            "expiry_date": { "type": "number" }
+          }
+        },
+        "microsoft": {
+          "type": "object",
+          "properties": {
+            "access_token": { "type": "string" },
+            "refresh_token": { "type": "string" },
+            "expires_in": { "type": "number" },
+            "ext_expires_in": { "type": "number" }
+          }
+        }
+      },
+      "required": ["userId"]
+    },
+    "Revenue": {
+      "title": "Revenue",
+      "description": "App-wide revenue tracking",
+      "type": "object",
+      "properties": {
+        "totalImpressions": { "type": "number" },
+        "estimatedRevenue": { "type": "number" },
+        "lastUpdated": { "type": "string", "format": "date-time" }
+      }
+    },
+    "HomeworkChat": {
+      "title": "Homework Chat",
+      "description": "User's chat history with the AI tutor",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "messages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "role": { "type": "string", "enum": ["user", "assistant"] },
+              "content": { "type": "string" },
+              "timestamp": { "type": "string", "format": "date-time" }
+            }
+          }
+        },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "messages"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profile data"
+    },
+    "/flashcardSets/{setId}": {
+      "schema": "FlashcardSet",
+      "description": "User created flashcard sets"
+    },
+    "/quizzes/{quizId}": {
+      "schema": "Quiz",
+      "description": "User generated quizzes"
+    },
+    "/studyGroups/{groupId}": {
+      "schema": "StudyGroup",
+      "description": "Collaborative study rooms"
+    },
+    "/studySchedules/{scheduleId}": {
+      "schema": "StudySchedule",
+      "description": "AI-generated study plans"
+    },
+    "/userTokens/{userId}": {
+      "schema": "UserTokens",
+      "description": "OAuth tokens for integrations"
+    },
+    "/revenue/{docId}": {
+      "schema": "Revenue",
+      "description": "Global revenue tracking"
+    },
+    "/homeworkChats/{userId}": {
+      "schema": "HomeworkChat",
+      "description": "User's homework chat history"
+    }
+  }
+}
